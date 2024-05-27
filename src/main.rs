@@ -12,9 +12,9 @@ fn main() {
     stdin.read_line(&mut input).unwrap();
 
     if parse_cmd(&input) {
-        println!("Command found!");
+        print!("Command found!");
     } else {
-        println!("{}: command not found", input);
+        print!("{}: command not found\n", input.trim_end());
     }
 }
 
