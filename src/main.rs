@@ -10,4 +10,14 @@ fn main() {
     let stdin = io::stdin();
     let mut input = String::new();
     stdin.read_line(&mut input).unwrap();
+
+    if parse_cmd(&input) {
+        println!("Command found!");
+    } else {
+        println!("{}: command not found", input);
+    }
+}
+
+fn parse_cmd(_input: &String) -> bool {
+    return false;
 }
