@@ -75,27 +75,38 @@ fn parse_cmd(input: &str) {
                 }
             }
         }
-        _ => match env::var("PATH") {
-            Err(_) => {
-                print!("PATH not found\n");
-                return;
-            }
-            Ok(paths) => {
-                for path in paths.split(":") {
-                    let full_path = format!("{}/{}", path, parts[0]);
-                    if std::path::Path::new(&full_path).exists() {
-                        let mut child = Command::new(full_path)
-                            .args(parts[1..].iter())
-                            .spawn()
-                            .expect("failed to execute command");
+        _ => {
+            if std::path::Path::new(parts[0]).exists() {
+                let mut child = Command::new(parts[0])
+                    .args(parts[1..].iter())
+                    .spawn()
+                    .expect("failed to execute command");
 
-                        let _result = child.wait().expect("failed to wait on child");
-                        return;
-                    }
-                }
-                print!("{}: command not found\n", parts[0]);
+                let _result = child.wait().expect("failed to wait on child");
                 return;
             }
-        },
+            match env::var("PATH") {
+                Err(_) => {
+                    print!("PATH not found\n");
+                    return;
+                }
+                Ok(paths) => {
+                    for path in paths.split(":") {
+                        let full_path = format!("{}/{}", path, parts[0]);
+                        if std::path::Path::new(&full_path).exists() {
+                            let mut child = Command::new(full_path)
+                                .args(parts[1..].iter())
+                                .spawn()
+                                .expect("failed to execute command");
+
+                            let _result = child.wait().expect("failed to wait on child");
+                            return;
+                        }
+                    }
+                    print!("{}: command not found\n", parts[0]);
+                    return;
+                }
+            }
+        }
     }
 }
