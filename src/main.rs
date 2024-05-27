@@ -71,7 +71,7 @@ fn parse_cmd(input: &str) -> bool {
                             return true;
                         }
                     }
-                    print!("{cmd}: command not found\n");
+                    print!("{cmd}: not found\n");
                     return true;
                 }
             }
