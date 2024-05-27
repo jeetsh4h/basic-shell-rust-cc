@@ -16,6 +16,8 @@ fn main() {
     }
 }
 
+const BUILT_IN_COMMANDS: [&str; 3] = ["exit", "echo", "type"];
+
 fn parse_cmd(input: &str) -> bool {
     let parts = input.split_whitespace().collect::<Vec<&str>>();
     if parts.len() == 0 {
@@ -42,6 +44,19 @@ fn parse_cmd(input: &str) -> bool {
             } else {
                 let echo_str = input[5..].trim();
                 print!("{}\n", echo_str);
+            }
+            return true;
+        }
+        "type" => {
+            if parts.len() != 2 {
+                print!("type: missing argument\n");
+                return true;
+            }
+            let cmd = parts[1];
+            if BUILT_IN_COMMANDS.contains(&cmd) {
+                print!("{} is a shell builtin\n", cmd);
+            } else {
+                print!("{} not found\n", cmd);
             }
             return true;
         }
